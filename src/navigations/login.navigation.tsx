@@ -14,8 +14,6 @@ export type LoginTypes = {
   navigation: LoginScreenNavigation
 }
 
-const Stack = createStackNavigator();
-
 export function LoginNavigation() {
   const Stack = createStackNavigator<LoginStackParamList>();
   return (
