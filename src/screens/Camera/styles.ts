@@ -7,8 +7,6 @@ export const styles = StyleSheet.create({
     },
     camera: {
       flex: 1,
-      height: Dimensions.get("window").width * 0.7,
-      width: Dimensions.get("window").width * 0.7,
     },
     buttonContainer: {
       flex: 1,
@@ -27,8 +25,8 @@ export const styles = StyleSheet.create({
       color: 'white',
     },
     img: {
-      height: Dimensions.get("window").width * 0.7,
-      width: Dimensions.get("window").width * 0.7
+      height: Dimensions.get("window").width * 0.8,
+      width: Dimensions.get("window").width * 0.8
     }
   });
   

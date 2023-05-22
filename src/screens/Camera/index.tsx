@@ -58,3 +58,20 @@ export function CameraScreen() {
   );
 }
 
+async function savePhoto() {
+  const asset = await MediaLibrary.createAssetAsync(photo!.uri)
+  MediaLibrary.createAlbumAsync("Images", asset, false)
+  Alert.alert("Imagem salva com sucesso!")
+}
+
+async function pickImage() {
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  })
+  if (!result.canceled) {
+    setPhoto(result.assets[0])
+  }
+}
