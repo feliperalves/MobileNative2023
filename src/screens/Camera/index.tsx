@@ -1,8 +1,8 @@
 import {styles} from "./styles";
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import { useRef, useState } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ComponentButtonInterface } from "../../components";
+import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ComponentButtonInterface, ComponentButtonTakePicture} from "../../components";
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -46,32 +46,37 @@ export function CameraScreen() {
       setPhoto(picture)
     }
   }
+
+  async function savePhoto() {
+    const asset = await MediaLibrary.createAssetAsync(photo!.uri)
+    MediaLibrary.createAlbumAsync("Images", asset, false)
+    Alert.alert("!Imagem salva com sucesso!")
+  }
+
+  async function pickImage() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+    if (!result.canceled) {
+      setPhoto(result.assets[0])
+    }
+  }
+
   return (
     <View style={styles.container}>
-    <ComponentButtonInterface title='Flip' type='secondary' onPressI={toggleCameraType}/> 
-    <Camera style = {styles.camera} type={type} ref={ref} />
-    <ComponentButtonInterface title="Tirar Foto" type='secondary' onPressI={takePicture} />
-    {photo && photo.uri &&(
-      <Image source={{uri: photo.uri}} style={styles.img} />
-    )}
+      <Camera style={styles.camera} type={type} ref={ref} >
+        <TouchableOpacity onPress={toggleCameraType} >
+            <MaterialCommunityIcons style = {styles.imgicon} name="camera-flip" size={24} color="black" />
+        </TouchableOpacity>
+        <ComponentButtonTakePicture onPress={takePicture} />
+      </Camera>
+      {photo && photo.uri && (
+        <Image source={{ uri: photo.uri }} style={styles.img} />
+      )}
+      <ComponentButtonInterface title='Salvar imagem' type='secondary' onPressI={savePhoto} />
+      <ComponentButtonInterface title='Abrir imagem' type='secondary' onPressI={pickImage} />
     </View>
   );
-}
-
-async function savePhoto() {
-  const asset = await MediaLibrary.createAssetAsync(photo!.uri)
-  MediaLibrary.createAlbumAsync("Images", asset, false)
-  Alert.alert("Imagem salva com sucesso!")
-}
-
-async function pickImage() {
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  })
-  if (!result.canceled) {
-    setPhoto(result.assets[0])
-  }
 }

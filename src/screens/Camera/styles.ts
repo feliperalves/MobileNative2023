@@ -7,6 +7,12 @@ export const styles = StyleSheet.create({
     },
     camera: {
       flex: 1,
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    imgicon:{
+      justifyContent: 'flex-start',
+      alignItems: 'center'
     },
     buttonContainer: {
       flex: 1,
@@ -18,6 +24,7 @@ export const styles = StyleSheet.create({
       flex: 1,
       alignSelf: 'flex-end',
       alignItems: 'center',
+      margin: 64
     },
     text: {
       fontSize: 24,
