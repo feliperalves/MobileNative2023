@@ -32,6 +32,14 @@
         {
           "cameraPermission": "Permita que $(PRODUCT_NAME) acesse a sua câmera."
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Permita Allow $(PRODUCT_NAME) acessar suas fotos.",
+          "savePhotosPermission": "Permita $(PRODUCT_NAME) salvar suas fotos.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
     ]
   }

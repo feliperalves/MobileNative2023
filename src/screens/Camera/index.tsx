@@ -1,8 +1,12 @@
 import {styles} from "./styles";
-import { Camera, CameraType } from 'expo-camera';
+import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import { useRef, useState } from 'react';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ComponentButtonInterface } from "../../components";
+import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 interface IPhoto{
   height: string
   uri: string
@@ -10,21 +14,23 @@ interface IPhoto{
 }
 export function CameraScreen() {
   const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [photo, setPhoto] = useState<IPhoto>();
-  const ref = useRef(null)
+  const [permissionCamera, requestPermissionCamera] = Camera.useCameraPermissions();
+  const [permissionMedia, requestPermissionMedia] = MediaLibrary.usePermissions();
+  const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset>();
+  const ref = useRef<Camera>(null);
+  const [takePhoto, setTakePhoto] = useState(false)
 
-  if (!permission) {
-    // Camera permissions are still loading
+  if (!permissionCamera) {
+    // As permissões da câmera ainda estão carregando
     return <View />;
   }
 
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
+  if (!permissionCamera.granted) {
+    // As permissões da câmera ainda não foram concedidas
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Text style={{ textAlign: 'center' }}>Precisamos de sua permissão para acessar a câmera</Text>
+        <Button onPress={requestPermissionCamera} title="grant permission" />
       </View>
     );
   }
@@ -42,7 +48,7 @@ export function CameraScreen() {
   }
   return (
     <View style={styles.container}>
-    <ComponentButtonInterface title='Flip' type='secondary' onPressI={toggleCameraType}/>
+    <ComponentButtonInterface title='Flip' type='secondary' onPressI={toggleCameraType}/> 
     <Camera style = {styles.camera} type={type} ref={ref} />
     <ComponentButtonInterface title="Tirar Foto" type='secondary' onPressI={takePicture} />
     {photo && photo.uri &&(

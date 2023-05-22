@@ -19,7 +19,7 @@ export function DrawerNavigation() {
       <Drawer.Screen name="Perfil" component={ScreenPerfil}
         options={{
           drawerIcon: () => (
-            <Entypo name="camera" color={colors.white}  size={24}/>
+            <Ionicons name = 'person' color={colors.white} size={24} />
           )
         }}
       />
