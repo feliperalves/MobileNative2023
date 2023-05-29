@@ -32,8 +32,8 @@ export const styles = StyleSheet.create({
       color: 'white',
     },
     img: {
-      height: Dimensions.get("window").width * 0.8,
-      width: Dimensions.get("window").width * 0.8
+      height: Dimensions.get("window").width * 1.0,
+      width: Dimensions.get("window").width * 1.0
     }
   });
   

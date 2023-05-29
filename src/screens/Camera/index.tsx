@@ -1,11 +1,13 @@
 import {styles} from "./styles";
-import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
+import { Camera, CameraCapturedPicture, CameraType, FaceDetectionResult} from 'expo-camera';
 import { useRef, useState } from 'react';
 import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ComponentButtonInterface, ComponentButtonTakePicture} from "../../components";
 import * as MediaLibrary from 'expo-media-library';
-import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker';
+import * as FaceDetector from 'expo-face-detector';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { BarCodeScanner, BarCodeScannerResult } from "expo-barcode-scanner";
 
 interface IPhoto{
   height: string
@@ -15,22 +17,44 @@ interface IPhoto{
 export function CameraScreen() {
   const [type, setType] = useState(CameraType.back);
   const [permissionCamera, requestPermissionCamera] = Camera.useCameraPermissions();
-  const [permissionMedia, requestPermissionMedia] = MediaLibrary.usePermissions();
-  const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset>();
-  const ref = useRef<Camera>(null);
-  const [takePhoto, setTakePhoto] = useState(false)
+  const [permissionMedia, requestPermissionMedia] = MediaLibrary.usePermissions()
+  const [photo, setPhoto] = useState<CameraCapturedPicture | ImagePicker.ImagePickerAsset>()
+  const ref = useRef<Camera>(null)
+  const [takePhoto, setTakePhoto ]= useState(false)
+  const [permissionQrCode, requestPermissionQrCode] = BarCodeScanner.usePermissions();
+  const [scanned, setScanned] = useState(false);
+  const [face, setFace] = useState<FaceDetector.FaceFeature>()
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    alert(data);
+  };
+
 
   if (!permissionCamera) {
-    // As permissões da câmera ainda estão carregando
+    // Camera permissions are still loading
     return <View />;
   }
 
   if (!permissionCamera.granted) {
-    // As permissões da câmera ainda não foram concedidas
+    // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>Precisamos de sua permissão para acessar a câmera</Text>
+        <Text style={{ textAlign: 'center' }}>Precisamos de permissão para acessar a câmera!!!</Text>
         <Button onPress={requestPermissionCamera} title="grant permission" />
+      </View>
+    );
+  }
+  if (!permissionMedia) {
+    // Camera permissions are still loading
+    return <View />;
+  }
+
+  if (!permissionMedia.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: 'center' }}>Precisamos de permissão para acessar a câmera!</Text>
+        <Button onPress={requestPermissionMedia} title="grant permission" />
       </View>
     );
   }
@@ -40,24 +64,25 @@ export function CameraScreen() {
   }
 
   async function takePicture() {
-    if(ref.current) {
-      const picture = await ref.current.takePictureAsync()
-      console.log(picture)
-      setPhoto(picture)
+    if (ref.current) {
+        const picture = await ref.current.takePictureAsync()
+        console.log(picture)
+        setPhoto(picture)
+        setTakePhoto(true)
     }
   }
 
   async function savePhoto() {
     const asset = await MediaLibrary.createAssetAsync(photo!.uri)
     MediaLibrary.createAlbumAsync("Images", asset, false)
-    Alert.alert("!Imagem salva com sucesso!")
+    Alert.alert("Imagem salva com sucesso!")
   }
 
   async function pickImage() {
-    const result = await ImagePicker.launchImageLibraryAsync({
+    const result= await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 1
     })
     if (!result.canceled) {
       setPhoto(result.assets[0])
@@ -66,17 +91,23 @@ export function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type} ref={ref} >
-        <TouchableOpacity onPress={toggleCameraType} >
-            <MaterialCommunityIcons style = {styles.imgicon} name="camera-flip" size={24} color="black" />
-        </TouchableOpacity>
-        <ComponentButtonTakePicture onPress={takePicture} />
-      </Camera>
-      {photo && photo.uri && (
-        <Image source={{ uri: photo.uri }} style={styles.img} />
-      )}
-      <ComponentButtonInterface title='Salvar imagem' type='secondary' onPressI={savePhoto} />
-      <ComponentButtonInterface title='Abrir imagem' type='secondary' onPressI={pickImage} />
+        {!takePhoto ? (
+          <>
+            <ComponentButtonInterface title='Inverter' type='secondary' onPressI={toggleCameraType} />
+            <Camera style={styles.camera} type={type} ref={ref}
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} />
+            <ComponentButtonInterface title='Tirar Foto' type='secondary' onPressI={takePicture}/>  
+          </>
+        ) : (
+          <>
+            <ComponentButtonInterface title='Salvar Imagem' type='secondary' onPressI={savePhoto}/>
+            <ComponentButtonInterface title='Abrir Imagem' type='secondary' onPressI={pickImage}/>
+            <ComponentButtonInterface title='Voltar' type='secondary' onPressI={takePicture}/>
+            {photo && photo.uri && (
+                <Image source={{ uri: photo.uri }} style={styles.img} />
+            )}  
+          </>
+        )}
     </View>
-  );
-}
+    );
+  }

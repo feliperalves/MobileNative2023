@@ -36,9 +36,15 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "Permita Allow $(PRODUCT_NAME) acessar suas fotos.",
+          "photosPermission": "Permita $(PRODUCT_NAME) acessar suas fotos.",
           "savePhotosPermission": "Permita $(PRODUCT_NAME) salvar suas fotos.",
           "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera."
         }
       ]
     ]
