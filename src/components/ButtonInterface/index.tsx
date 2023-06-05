@@ -20,3 +20,4 @@ export function ButtonInterface({ onPressI, title, type, ...rest }: IBInterface)
         </TouchableOpacity>
     )
 }
+

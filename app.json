@@ -44,7 +44,13 @@
       [
         "expo-barcode-scanner",
         {
-          "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera."
+          "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera!"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Permita $(PRODUCT_NAME) acessar a sua localização!"
         }
       ]
     ]
