@@ -26,6 +26,6 @@ export const styles = StyleSheet.create({
       height: 56,
       borderRadius: 7,
       borderWidth: 2,
-      borderColor: colors.third
+      borderColor: colors.secondary
     }
 });
