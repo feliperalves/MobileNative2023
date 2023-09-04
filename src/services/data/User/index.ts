@@ -19,6 +19,7 @@ export interface IUser {
 export interface IUserLogin {
     user: string 
     token: {
+        token: any
         expires_at: string
     }
 }
