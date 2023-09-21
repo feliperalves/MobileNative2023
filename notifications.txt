@@ -1,0 +1,22 @@
+Branch             
+master
+
+Runtime version    
+exposdk:48.0.0
+
+Platform           
+android, ios
+
+Update group ID    eb25a0a9-1edc-452e-b828-59dbdcef7a70
+
+Android update ID  057e7f84-9c91-4c8e-9d08-34f29594c20d
+
+iOS update ID      3b28a9d0-96e4-4283-bfc3-0fb12fb9e4cf
+
+Message
+Alterações no package.json
+
+Commit             c5bb8fe43a4acdc176cadb9495c9186d5d56fc45*
+
+Website link       
+https://expo.dev/accounts/feliperalves/projects/Mobile/updates/eb25a0a9-1edc-452e-b828-59dbdcef7a70
