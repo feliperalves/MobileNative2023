@@ -11,8 +11,8 @@ import { ComponentLoading } from "../../components";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
   }),
 });
 
@@ -49,5 +49,5 @@ export function Perfil({ navigation }: TabTypes) {
         </View>
       )}
     </>
-  );
+  )
 }

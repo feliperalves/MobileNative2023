@@ -20,6 +20,7 @@ export interface IErrorApi{
 export function Cadastrar({ navigation }: LoginTypes) {
   const [data, setData] = useState<IRegister>();
   const [isLoading, setIsLoading] = useState(true);
+
   async function handleRegister() {
     try {
         setIsLoading(true)
