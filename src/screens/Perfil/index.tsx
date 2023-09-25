@@ -6,7 +6,7 @@ import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "../../services/data/Push";
 import { useAuth } from "../../hooks/auth";
 import { useEffect, useState } from "react";
-import { ComponentLoading } from "../../components";
+import { ComponentLoading, ComponentButtonInterface } from "../../components";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -17,11 +17,11 @@ Notifications.setNotificationHandler({
 });
 
 export function Perfil({ navigation }: TabTypes) {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  function handleVoltar() {
-    const login = navigation.getParent();
-    login?.goBack();
+  async function handleVoltar() {
+    console.log("oi")
+    await signOut();
   }
   useEffect(() => {
     if (user) {
@@ -31,7 +31,7 @@ export function Perfil({ navigation }: TabTypes) {
   useEffect(() => {
     async function fetchToken() {
       const token = await registerForPushNotificationsAsync();
-      console.log;
+      console.log(token);
     }
     fetchToken();
   }, []);
@@ -43,9 +43,9 @@ export function Perfil({ navigation }: TabTypes) {
       ) : (
         <View style={styles.container}>
           <Text>Perfil</Text>
-          <TouchableOpacity onPress={handleVoltar}>
-            <Text>Voltar</Text>
-          </TouchableOpacity>
+          <ComponentButtonInterface onPressI={handleVoltar} title="Voltar" type="secondary">
+            <Text>Voltar oioioi</Text>
+          </ComponentButtonInterface>
         </View>
       )}
     </>
